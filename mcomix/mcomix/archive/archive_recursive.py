@@ -3,7 +3,7 @@
 ''' Class for transparently handling an archive containing sub-archives. '''
 
 import os
-import tempfile
+from memory_tempfile import MemoryTempfile
 
 from mcomix.preferences import prefs
 from mcomix.archive import archive_base
@@ -16,7 +16,8 @@ class RecursiveArchive(archive_base.BaseArchive):
         super(RecursiveArchive, self).__init__(archive.archive)
         self._main_archive = archive
         self.is_encrypted = self._main_archive.is_encrypted
-        self._tempdir = tempfile.TemporaryDirectory(
+        self._tempfile = MemoryTempfile()
+        self._tempdir = self._tempfile.TemporaryDirectory(
             prefix=prefix, dir=prefs['temporary directory'])
         self._sub_tempdirs = []
         self._sub_archives = set()
